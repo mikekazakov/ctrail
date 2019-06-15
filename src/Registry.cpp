@@ -2,6 +2,6 @@
 
 namespace ctrail {
 
-Registry::~Registry(){};
+Registry::~Registry() = default;
 
 }

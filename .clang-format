@@ -12,4 +12,4 @@ BreakBeforeBraces: Custom
 BraceWrapping:
     AfterFunction: true
 BreakStringLiterals: true
-
+SortIncludes: false

@@ -1,7 +1,7 @@
-#include <algorithm>
 #include <ctrail/RegistryImpl.h>
 #include <ctrail/RegistrySnapshot.h>
 #include <exception>
+#include <algorithm>
 
 namespace ctrail {
 

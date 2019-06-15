@@ -2,7 +2,7 @@
 #include <ctrail/RegistryImpl.h>
 #include <ctrail/RegistrySnapshot.h>
 
-#define PREFIX "RegistryImpl"
+#define PREFIX "RegistryImpl "
 
 TEST_CASE(PREFIX"implements every counter")
 {
@@ -88,6 +88,13 @@ TEST_CASE(PREFIX"throws on registering the same name twice")
     std::int32_t cnt2;
     CHECK_NOTHROW( registry.add("1", cnt1) );
     CHECK_THROWS( registry.add("1", cnt2) ); 
+}
+
+TEST_CASE(PREFIX "throws on registering an empty puller")
+{
+    ctrail::RegistryImpl registry;
+    std::function<std::int64_t()> puller;
+    CHECK_THROWS(registry.add("1", puller));
 }
 
 TEST_CASE(PREFIX"sorts counters names")

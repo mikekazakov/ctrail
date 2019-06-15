@@ -5,9 +5,13 @@ include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(TARGETS)
 
 add_library(ctrail
+  include/ctrail/Dashboard.h
+  include/ctrail/DashboardImpl.h
   include/ctrail/Registry.h
   include/ctrail/RegistryImpl.h
   include/ctrail/RegistrySnapshot.h
+  src/Dashboard.cpp
+  src/DashboardImpl.cpp
   src/Registry.cpp
   src/RegistryImpl.cpp
 )
