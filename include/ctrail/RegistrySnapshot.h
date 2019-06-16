@@ -7,7 +7,8 @@
 
 namespace ctrail {
 
-struct RegistrySnapshot {
+class RegistrySnapshot {
+public:
     template <typename T> using vector = std::vector<T>;
 
     vector<std::string> names;

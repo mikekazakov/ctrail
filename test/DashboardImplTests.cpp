@@ -5,7 +5,7 @@
 using namespace ctrail; 
 
 #define PREFIX "DashboardImpl "
-TEST_CASE(PREFIX"provides the same set of counter names")
+TEST_CASE(PREFIX"provides the same set of counters names")
 {
     std::int64_t cnt;
     RegistryImpl registry;

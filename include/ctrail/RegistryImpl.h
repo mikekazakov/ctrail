@@ -1,4 +1,5 @@
 #pragma once
+
 #include <ctrail/Registry.h>
 #include <string>
 #include <unordered_set>
@@ -6,7 +7,7 @@
 
 namespace ctrail {
 
-struct RegistrySnapshot;
+class RegistrySnapshot;
 
 class RegistryImpl : public Registry {
 public:

@@ -15,7 +15,7 @@ const std::vector<std::string>& DashboardImpl::names() const
 
 std::vector<std::int64_t> DashboardImpl::values() const
 {
-    std::vector<std::int64_t> values(m_Registry.names.size());
+    std::vector<std::int64_t> values(m_Registry.names.size(), 0);
 
     const auto memory = values.data();
     gatherInt32s(memory);
