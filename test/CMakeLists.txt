@@ -15,3 +15,4 @@ target_link_libraries(tests
 )
 
 add_test(NAME tests COMMAND tests)
+

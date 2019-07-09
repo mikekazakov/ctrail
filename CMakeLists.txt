@@ -12,12 +12,14 @@ add_library(ctrail
   include/ctrail/RegistrySnapshot.h
   include/ctrail/ValuesStorage.h
   include/ctrail/MonotonicValuesStorage.h  
+  include/ctrail/CyclicValuesStorage.h
   src/Dashboard.cpp
   src/DashboardImpl.cpp
   src/Registry.cpp
   src/RegistryImpl.cpp
   src/ValuesStorage.cpp
   src/MonotonicValuesStorage.cpp
+  src/CyclicValuesStorage.cpp
 )
 
 target_compile_features(ctrail PUBLIC cxx_std_17)

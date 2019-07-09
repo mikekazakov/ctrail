@@ -74,8 +74,9 @@ TEST_CASE(PREFIX "supports the edge case of no counters")
     CHECK(storage.timePointsNumber() == 1);
     CHECK(storage.timePoint(0) == tp);
 
-    storage.copyValuesByTimePoint(0, &v, 0);
-    CHECK(v == 0xDEADBEEF);
+    std::int64_t s = 0xCAFEDEAD;
+    storage.copyValuesByTimePoint(0, &s, 0);
+    CHECK(s == 0xCAFEDEAD);
 }
 
 TEST_CASE(PREFIX "is virtually unlimited")
