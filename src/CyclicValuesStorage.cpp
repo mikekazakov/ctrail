@@ -66,7 +66,7 @@ std::size_t CyclicValuesStorage::countersNumber() const
     return m_CountersNumber;
 }
 
-std::string CyclicValuesStorage::counterName(std::size_t _index) const
+const std::string &CyclicValuesStorage::counterName(std::size_t _index) const
 {
     assert(_index < m_CountersNumber);
     return m_CountersNames[_index];

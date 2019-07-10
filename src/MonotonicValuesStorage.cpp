@@ -51,7 +51,7 @@ std::size_t MonotonicValuesStorage::countersNumber() const
     return m_CountersNumber;
 }
 
-std::string MonotonicValuesStorage::counterName(std::size_t _index) const
+const std::string &MonotonicValuesStorage::counterName(std::size_t _index) const
 {
     assert(_index < m_CountersNumber);
     return m_CountersNames[_index];

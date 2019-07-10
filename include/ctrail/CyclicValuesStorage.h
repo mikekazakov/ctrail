@@ -6,23 +6,25 @@
 
 namespace ctrail {
 
-class CyclicValuesStorage : public ValuesStorage {
+class CyclicValuesStorage {
 public:
+    using time_point = ValuesStorage::time_point;
+
     CyclicValuesStorage(const std::vector<std::string>& _counters_names,
                         std::size_t _max_time_points);
 
     void addValues(time_point _time_point, const std::int64_t* _values,
-                   std::size_t _values_number) override;
+                   std::size_t _values_number);
 
-    std::size_t timePointsNumber() const override;
-    time_point timePoint(std::size_t _index) const override;
+    std::size_t timePointsNumber() const;
+    time_point timePoint(std::size_t _index) const;
     void copyValuesByTimePoint(std::size_t _index, std::int64_t* _buffer,
-                               std::size_t _buffer_elements) const override;
+                               std::size_t _buffer_elements) const;
 
-    std::size_t countersNumber() const override;
-    std::string counterName(std::size_t _index) const override;
+    std::size_t countersNumber() const;
+    const std::string& counterName(std::size_t _index) const;
     void copyValuesByCounter(std::size_t _index, std::int64_t* _buffer,
-                             std::size_t _buffer_elements) const override;
+                             std::size_t _buffer_elements) const;
 
 private:
     std::size_t m_CountersNumber;

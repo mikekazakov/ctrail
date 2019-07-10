@@ -7,7 +7,7 @@ using std::chrono::system_clock;
 #define PREFIX "MonotonicValuesStorage "
 TEST_CASE(PREFIX "provides the same set of counters names")
 {
-    MonotonicValuesStorage storage({"a", "b", "c"});
+    ValuesStorage storage{MonotonicValuesStorage({"a", "b", "c"})};
 
     CHECK(storage.countersNumber() == 3);
 
@@ -18,7 +18,7 @@ TEST_CASE(PREFIX "provides the same set of counters names")
 
 TEST_CASE(PREFIX "provides correct views")
 {
-    MonotonicValuesStorage storage({"a", "b", "c"});
+    ValuesStorage storage{MonotonicValuesStorage({"a", "b", "c"})};
 
     std::vector<std::int64_t> v1{10, 11, 12};
     auto tp1 = system_clock::time_point{system_clock::duration{1}};
@@ -65,7 +65,7 @@ TEST_CASE(PREFIX "provides correct views")
 
 TEST_CASE(PREFIX "supports the edge case of no counters")
 {
-    MonotonicValuesStorage storage({});
+    ValuesStorage storage{MonotonicValuesStorage({})};
     CHECK(storage.countersNumber() == 0);
 
     std::int64_t v = 0xDEADBEEF;
@@ -81,7 +81,7 @@ TEST_CASE(PREFIX "supports the edge case of no counters")
 
 TEST_CASE(PREFIX "is virtually unlimited")
 {
-    MonotonicValuesStorage storage({"a"});
+    ValuesStorage storage{MonotonicValuesStorage({"a"})};
     const size_t number = 1000000;
     const std::int64_t v = std::numeric_limits<std::int64_t>::max();
     const auto tp = system_clock::time_point{system_clock::duration{42}};
@@ -98,4 +98,14 @@ TEST_CASE(PREFIX "is virtually unlimited")
     for (auto i = 0; i < number; ++i)
         storage.copyValuesByTimePoint(i, &values[i], 1);
     CHECK(std::count(values.begin(), values.end(), v) == number);
+}
+
+TEST_CASE(PREFIX "swap sworks")
+{
+    ValuesStorage storage1{MonotonicValuesStorage({"a", "b", "c"})};
+    ValuesStorage storage2{MonotonicValuesStorage({"e", "f", "g"})};
+    std::swap(storage1, storage2);
+
+    CHECK(storage1.counterName(0) == "e");
+    CHECK(storage2.counterName(0) == "a");
 }
