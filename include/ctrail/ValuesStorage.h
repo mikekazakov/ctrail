@@ -15,7 +15,7 @@ public:
     ValuesStorage(T _impl);
     ValuesStorage(const ValuesStorage &_rhs);
     ValuesStorage(ValuesStorage &&_rhs) noexcept;
-    ~ValuesStorage(); 
+    ~ValuesStorage();
 
     void addValues(time_point _time_point, const std::int64_t* _values,
                            std::size_t _values_number);

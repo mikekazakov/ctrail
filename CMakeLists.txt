@@ -13,6 +13,7 @@ add_library(ctrail
   include/ctrail/ValuesStorage.h
   include/ctrail/MonotonicValuesStorage.h  
   include/ctrail/CyclicValuesStorage.h
+  include/ctrail/ValuesStorageExport.h
   src/Dashboard.cpp
   src/DashboardImpl.cpp
   src/Registry.cpp
@@ -20,6 +21,7 @@ add_library(ctrail
   src/ValuesStorage.cpp
   src/MonotonicValuesStorage.cpp
   src/CyclicValuesStorage.cpp
+  src/ValuesStorageExport.cpp
 )
 
 target_compile_features(ctrail PUBLIC cxx_std_17)
