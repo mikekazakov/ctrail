@@ -23,7 +23,7 @@ std::string CSVExport::format(const ValuesStorage &_values, Options _options) co
     
     const std::size_t counters = _values.countersNumber();
     const std::size_t time_points = _values.timePointsNumber();
-    std::unique_ptr<std::int64_t[]> counter_values = std::make_unique<std::int64_t[]>(time_points);
+    const std::unique_ptr<std::int64_t[]> counter_values = std::make_unique<std::int64_t[]>(time_points);
     for( std::size_t counter = 0; counter < counters; ++counter )
         csv += composeRow(_values, counter, counter_values.get(), time_points, _options);
     

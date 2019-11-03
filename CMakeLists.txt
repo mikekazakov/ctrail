@@ -19,6 +19,7 @@ add_library(ctrail
   include/ctrail/CyclicValuesStorage.h
   include/ctrail/ValuesStorageExport.h
   include/ctrail/CSVExport.h
+  include/ctrail/ChromeTraceExport.h
   src/Dashboard.cpp
   src/DashboardImpl.cpp
   src/Registry.cpp
@@ -28,6 +29,7 @@ add_library(ctrail
   src/CyclicValuesStorage.cpp
   src/ValuesStorageExport.cpp
   src/CSVExport.cpp
+  src/ChromeTraceExport.cpp
 )
 
 target_compile_features(ctrail PUBLIC cxx_std_17)
@@ -40,3 +42,5 @@ target_include_directories(ctrail
 
 enable_testing()
 add_subdirectory(test)
+
+add_subdirectory(examples)

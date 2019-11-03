@@ -17,6 +17,8 @@ static time_t to_local(time_t _time)
     return mktime(&tm);
 }
 
+// TODO: test skip_idle_counters
+
 TEST_CASE(PREFIX"properly composes headers")
 {
     CSVExport exporter;
