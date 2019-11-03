@@ -21,10 +21,12 @@ std::string ChromeTraceExport::format(const ValuesStorage &_values, Options _opt
     const std::unique_ptr<std::int64_t[]> counter_values = std::make_unique<std::int64_t[]>(time_points);
     for( std::size_t counter = 0; counter < counters; ++counter ) {
         auto report = composeCounter(_values, counter, counter_values.get(), time_points, _options);
-        if( report.empty() == false && counter > 0 )
-            trace += ",\n";
-        trace += report;
-    }    
+        if( report.empty() == false ) {
+            if( counter > 0 )
+                trace += ",\n";        
+            trace += report;
+        }
+    }
     trace += "\n]}";        
     return trace;
 }

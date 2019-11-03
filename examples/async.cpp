@@ -65,6 +65,6 @@ int main()
     ctrail::ValuesStorageExport exporter{ ctrail::CSVExport{} };
     std::cout << exporter.format(storage, ctrail::ValuesStorageExport::Options::differential) << std::endl;
     
-    ctrail::ChromeTraceExport exporter2;
+    ctrail::ValuesStorageExport exporter2{ ctrail::ChromeTraceExport{} };
     std::cout << exporter2.format(storage, ctrail::ValuesStorageExport::Options::differential) << std::endl;    
 }
