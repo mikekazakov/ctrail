@@ -25,6 +25,9 @@ public:
                            std::int64_t *_tmp_buffer, std::size_t _tmp_buffer_size,
                            Options _options) const;
 private:
+    static bool isIdle(const std::int64_t * const _values, const std::size_t _size) noexcept;
+    static std::string fmtTime(std::chrono::system_clock::time_point _tp);    
+
     Formatting m_Formatting;
 };
     

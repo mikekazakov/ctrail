@@ -7,8 +7,6 @@
 
 namespace ctrail {
 
-static std::string fmt_time(std::chrono::system_clock::time_point _tp);
-
 CSVExport::CSVExport() = default;
     
 CSVExport::CSVExport( const Formatting &_formatting ):
@@ -43,7 +41,7 @@ std::string CSVExport::composeHeaders(const ValuesStorage &_values, Options _opt
     if ( time_points > start_index ) {
         buf += m_Formatting.values_delimiter;
         for( std::size_t i = start_index; i < time_points; ++i ) {
-            buf += fmt_time(_values.timePoint(i));
+            buf += fmtTime(_values.timePoint(i));
             if( i + 1 < time_points ) {
                 buf += m_Formatting.values_delimiter;
             }
@@ -53,7 +51,7 @@ std::string CSVExport::composeHeaders(const ValuesStorage &_values, Options _opt
     return buf;
 }
 
-static bool is_idle(const std::int64_t * const _values, const std::size_t _size)
+bool CSVExport::isIdle(const std::int64_t * const _values, const std::size_t _size) noexcept
 {
     return std::none_of(_values, _values + _size, [](auto v) { return v != 0; });
 }
@@ -70,7 +68,7 @@ std::string CSVExport::composeRow(const ValuesStorage &_values, std::size_t _cou
     _values.copyValuesByCounter(_counter_index, _tmp_buffer, _tmp_buffer_size);
  
     if( (_options & Options::skip_idle_counters) == Options::skip_idle_counters && 
-        is_idle(_tmp_buffer, _tmp_buffer_size) )
+        isIdle(_tmp_buffer, _tmp_buffer_size) )
         return {};
     
     std::string buf;
@@ -97,7 +95,7 @@ std::string CSVExport::composeRow(const ValuesStorage &_values, std::size_t _cou
     return buf;
 }
 
-static std::string fmt_time(std::chrono::system_clock::time_point _tp)
+std::string CSVExport::fmtTime(std::chrono::system_clock::time_point _tp)
 {
     using namespace std::chrono;
     const auto time = system_clock::to_time_t(_tp);
