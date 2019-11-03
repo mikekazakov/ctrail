@@ -52,7 +52,12 @@ std::string CSVExport::composeHeaders(const ValuesStorage &_values, Options _opt
     buf += m_Formatting.newline_delimiter;
     return buf;
 }
-    
+
+static bool is_idle(const std::int64_t * const _values, const std::size_t _size)
+{
+    return std::none_of(_values, _values + _size, [](auto v) { return v != 0; });
+}
+
 std::string CSVExport::composeRow(const ValuesStorage &_values, std::size_t _counter_index,
                                   std::int64_t *_tmp_buffer, std::size_t _tmp_buffer_size,
                                   Options _options) const
@@ -63,6 +68,10 @@ std::string CSVExport::composeRow(const ValuesStorage &_values, std::size_t _cou
     const std::size_t time_points = _values.timePointsNumber();
     assert( _tmp_buffer_size == time_points );
     _values.copyValuesByCounter(_counter_index, _tmp_buffer, _tmp_buffer_size);
+ 
+    if( (_options & Options::skip_idle_counters) == Options::skip_idle_counters && 
+        is_idle(_tmp_buffer, _tmp_buffer_size) )
+        return {};
     
     std::string buf;
     buf += counter_name;

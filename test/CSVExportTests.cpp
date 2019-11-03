@@ -71,6 +71,7 @@ TEST_CASE(PREFIX"properly composes rows")
 {
     const auto none = ValuesStorageExport::Options::none;
     const auto diff = ValuesStorageExport::Options::differential;
+    const auto skip = ValuesStorageExport::Options::skip_idle_counters;
     
     CSVExport exporter;
     
@@ -82,6 +83,9 @@ TEST_CASE(PREFIX"properly composes rows")
     CHECK( exporter.composeRow(storage, 0, buf, 0, diff) == "a\n" );
     CHECK( exporter.composeRow(storage, 1, buf, 0, diff) == "b\n" );
     CHECK( exporter.composeRow(storage, 2, buf, 0, diff) == "c\n" );
+    CHECK( exporter.composeRow(storage, 0, buf, 0, skip) == "" );
+    CHECK( exporter.composeRow(storage, 1, buf, 0, skip) == "" );
+    CHECK( exporter.composeRow(storage, 2, buf, 0, skip) == "" );
 
     
     storage.addValues(system_clock::from_time_t(to_local(1)),
@@ -92,6 +96,9 @@ TEST_CASE(PREFIX"properly composes rows")
     CHECK( exporter.composeRow(storage, 0, buf, 1, diff) == "a\n" );
     CHECK( exporter.composeRow(storage, 1, buf, 1, diff) == "b\n" );
     CHECK( exporter.composeRow(storage, 2, buf, 1, diff) == "c\n" );
+    CHECK( exporter.composeRow(storage, 0, buf, 1, skip) == "a,10\n" );
+    CHECK( exporter.composeRow(storage, 1, buf, 1, skip) == "b,11\n" );
+    CHECK( exporter.composeRow(storage, 2, buf, 1, skip) == "c,13\n" );    
     
     storage.addValues(system_clock::from_time_t(to_local(2)),
                       std::array{i64(20), i64(22), i64(26)}.data(), 3);
@@ -101,6 +108,9 @@ TEST_CASE(PREFIX"properly composes rows")
     CHECK( exporter.composeRow(storage, 0, buf, 2, diff) == "a,10\n" );
     CHECK( exporter.composeRow(storage, 1, buf, 2, diff) == "b,11\n" );
     CHECK( exporter.composeRow(storage, 2, buf, 2, diff) == "c,13\n" );
+    CHECK( exporter.composeRow(storage, 0, buf, 2, skip) == "a,10,20\n" );
+    CHECK( exporter.composeRow(storage, 1, buf, 2, skip) == "b,11,22\n" );
+    CHECK( exporter.composeRow(storage, 2, buf, 2, skip) == "c,13,26\n" );
     
     storage.addValues(system_clock::from_time_t(to_local(3)),
                       std::array{i64(30), i64(33), i64(39)}.data(), 3);
@@ -110,6 +120,37 @@ TEST_CASE(PREFIX"properly composes rows")
     CHECK( exporter.composeRow(storage, 0, buf, 3, diff) == "a,10,10\n" );
     CHECK( exporter.composeRow(storage, 1, buf, 3, diff) == "b,11,11\n" );
     CHECK( exporter.composeRow(storage, 2, buf, 3, diff) == "c,13,13\n" );
+    CHECK( exporter.composeRow(storage, 0, buf, 3, skip) == "a,10,20,30\n" );
+    CHECK( exporter.composeRow(storage, 1, buf, 3, skip) == "b,11,22,33\n" );
+    CHECK( exporter.composeRow(storage, 2, buf, 3, skip) == "c,13,26,39\n" );    
+}
+
+TEST_CASE(PREFIX"skips rows when asked to")
+{
+    const auto none = ValuesStorageExport::Options::none;
+    const auto diff = ValuesStorageExport::Options::differential;
+    const auto skip = ValuesStorageExport::Options::skip_idle_counters;
+        
+    ValuesStorage storage{ MonotonicValuesStorage{{"a", "b", "c"}} };
+    storage.addValues(system_clock::from_time_t(to_local(1)),
+                      std::array{i64(10), i64(0), i64(13)}.data(), 3);
+    storage.addValues(system_clock::from_time_t(to_local(2)),
+                      std::array{i64(20), i64(0), i64(26)}.data(), 3);    
+
+    std::int64_t buf[3];
+    CSVExport exporter;        
+    CHECK( exporter.composeRow(storage, 0, buf, 2, none) == "a,10,20\n" );
+    CHECK( exporter.composeRow(storage, 1, buf, 2, none) == "b,0,0\n" );
+    CHECK( exporter.composeRow(storage, 2, buf, 2, none) == "c,13,26\n" );
+    CHECK( exporter.composeRow(storage, 0, buf, 2, diff) == "a,10\n" );
+    CHECK( exporter.composeRow(storage, 1, buf, 2, diff) == "b,0\n" );
+    CHECK( exporter.composeRow(storage, 2, buf, 2, diff) == "c,13\n" );
+    CHECK( exporter.composeRow(storage, 0, buf, 2, skip) == "a,10,20\n" );
+    CHECK( exporter.composeRow(storage, 1, buf, 2, skip) == "" );
+    CHECK( exporter.composeRow(storage, 2, buf, 2, skip) == "c,13,26\n" );
+    CHECK( exporter.composeRow(storage, 0, buf, 2, skip|diff) == "a,10\n" );
+    CHECK( exporter.composeRow(storage, 1, buf, 2, skip|diff) == "" );
+    CHECK( exporter.composeRow(storage, 2, buf, 2, skip|diff) == "c,13\n" );        
 }
 
 TEST_CASE(PREFIX"properly composes a CSV")
