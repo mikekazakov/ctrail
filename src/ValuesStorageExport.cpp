@@ -1,4 +1,5 @@
 #include <ctrail/ValuesStorageExport.h>
+#include <cassert>
 
 namespace ctrail {
 
