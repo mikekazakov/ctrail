@@ -1,7 +1,9 @@
 matrix:
   include:
+    # Linux / GCC7 / Release  
     - os: linux
       dist: bionic
+      compiler: gcc      
       addons:
         apt:
           sources: ubuntu-toolchain-r-test
@@ -9,15 +11,38 @@ matrix:
       env:
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7" CMAKE_BUILD_TYPE=Release
 
+    # Linux / GCC8 / Release  
+    - os: linux
+      dist: bionic
+      compiler: gcc      
+      addons:
+        apt:
+          sources: ubuntu-toolchain-r-test
+          packages: g++-8
+      env:
+        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8" CMAKE_BUILD_TYPE=Release
+
+    # Linux / GCC9 / Release  
+    - os: linux
+      dist: bionic
+      compiler: gcc      
+      addons:
+        apt:
+          sources: ubuntu-toolchain-r-test
+          packages: g++-9
+      env:
+        - MATRIX_EVAL="CC=gcc-9 && CXX=g++-9" CMAKE_BUILD_TYPE=Release
+
+    # Linux / GCC9 / Debug
     - os: linux
       dist: bionic
       compiler: gcc
       addons:
         apt:
           sources: ubuntu-toolchain-r-test
-          packages: g++-7
+          packages: g++-9
       env:
-        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7" CMAKE_BUILD_TYPE=Debug
+        - MATRIX_EVAL="CC=gcc-9 && CXX=g++-9" CMAKE_BUILD_TYPE=Debug
 
 #env:
 #  - CMAKE_BUILD_TYPE=Release
