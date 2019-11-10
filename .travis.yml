@@ -33,16 +33,9 @@ matrix:
       env:
         - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8" CMAKE_BUILD_TYPE=Debug
 
-#env:
-#  - CMAKE_BUILD_TYPE=Release
-#  - CMAKE_BUILD_TYPE=Debug
 
-#os: linux
-language: python
-python: "3.7"
-#dist: bionic
-#compiler:
-#  - gcc
+# language: python
+# python: "3.7"
 before_install:
   - eval "${MATRIX_EVAL}"
 install:
