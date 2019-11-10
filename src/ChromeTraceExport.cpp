@@ -50,7 +50,7 @@ std::string ChromeTraceExport::composeCounter(const ValuesStorage &_values, std:
     
     const std::string prefix = "{\"pid\":1,\"tid\":1,\"name\":\"" +
     counter_name + "\",\"ph\":\"C\",\"ts\":";       
-    const auto make_report = [prefix](ValuesStorage::time_point::duration _tp,
+    const auto make_report = [prefix](std::chrono::microseconds _tp,
                                       std::int64_t _value ) -> std::string {
         std::string report = prefix;
         report += std::to_string(_tp.count());
