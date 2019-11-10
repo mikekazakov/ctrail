@@ -50,7 +50,7 @@ std::string ChromeTraceExport::composeCounter(const ValuesStorage &_values, std:
     
     const std::string prefix = "{\"pid\":1,\"tid\":1,\"name\":\"" +
     counter_name + "\",\"ph\":\"C\",\"ts\":";       
-    const auto make_report = [prefix](std::chrono::microseconds _tp,
+    const auto make_report = [prefix](microseconds _tp,
                                       std::int64_t _value ) -> std::string {
         std::string report = prefix;
         report += std::to_string(_tp.count());
@@ -85,7 +85,8 @@ std::string ChromeTraceExport::composeCounter(const ValuesStorage &_values, std:
         ( last_tp - _values.timePoint(time_points - 2) ) :
         duration_cast<ValuesStorage::time_point::duration>(m_Formatting.tombstone_offset); 
         const auto tombstone_tp = last_tp + tp_diff;
-        buf += make_report(tombstone_tp - start_time, m_Formatting.tombstone_value);
+        const auto tombstone_ts = duration_cast<microseconds>(tombstone_tp - start_time);
+        buf += make_report(tombstone_ts, m_Formatting.tombstone_value);
     }
     return buf;                                                                                            
 }
