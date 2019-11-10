@@ -1,5 +1,5 @@
 #include <ctrail/DashboardImpl.h>
-#include <assert.h>
+#include <cassert>
 
 namespace ctrail {
 

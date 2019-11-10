@@ -1,6 +1,7 @@
 #include <ctrail/ChromeTraceExport.h>
 #include <numeric>
 #include <algorithm>
+#include <cassert>
 
 namespace ctrail {
 

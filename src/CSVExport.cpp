@@ -4,6 +4,7 @@
 #include <ctime>
 #include <iomanip>
 #include <numeric>
+#include <cassert>
 
 namespace ctrail {
 
