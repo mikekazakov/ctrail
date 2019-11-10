@@ -1,4 +1,5 @@
 #include <ctrail/CyclicValuesStorage.h>
+#include <cassert>
 
 namespace ctrail {
 
