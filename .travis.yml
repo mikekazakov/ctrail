@@ -33,11 +33,10 @@ matrix:
       env:
         - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8" CMAKE_BUILD_TYPE=Debug
 
-    # macOS / Xcode11.2 / Release  
+    # macOS / Xcode10 / Release  
     - os: osx
-      osx_image: xcode11.2
-      compiler: clang
-      brew_packages: conan      
+      osx_image: xcode10
+      compiler: clang      
       env:
         - MATRIX_EVAL="" CMAKE_BUILD_TYPE=Release
 
