@@ -41,7 +41,7 @@ matrix:
         - MATRIX_EVAL="" CMAKE_BUILD_TYPE=Release
 
 language: python
-python: "3.7"
+python: "3.6"
 before_install:
   - eval "${MATRIX_EVAL}"
 install:
