@@ -11,6 +11,7 @@
 #include <thread>
 #include <chrono>
 #include <random>
+#include <fstream>
 
 static std::atomic_bool g_Work{true};
 static std::atomic_int g_FooCnt{0};
@@ -43,18 +44,21 @@ int main()
     using namespace std::this_thread;
     using std::chrono::milliseconds;
 
+    // Set up ctrail machinery
     ctrail::RegistryImpl registry;
     RegisterCounters(registry);
     ctrail::DashboardImpl dashboard{ registry.bake() };
     ctrail::ValuesStorage storage{ ctrail::MonotonicValuesStorage{dashboard.names()} };
+    std::thread watchdog([&]{ Watchdog( dashboard, storage, g_ReportPeriod); });
 
+    // Set up 'subsystems'
     std::mt19937 gen(std::random_device{}());
     std::uniform_int_distribution<> dist(100, 500); 
-    std::thread watchdog([&]{ Watchdog( dashboard, storage, g_ReportPeriod); });
     std::thread foo{[&]{ while( g_Work ) ++g_FooCnt, sleep_for( milliseconds{dist(gen)} ); }};
     std::thread bar{[&]{ while( g_Work ) ++g_BarCnt, sleep_for( milliseconds{dist(gen)} ); }};
     std::thread baz{[&]{ while( g_Work ) ++g_BazCnt, sleep_for( milliseconds{dist(gen)} ); }};    
     
+    // Do some work
     sleep_for(g_TotalTime);
     g_Work = false;
     foo.join();
@@ -62,9 +66,10 @@ int main()
     baz.join();
     watchdog.join();
     
-    ctrail::ValuesStorageExport exporter{ ctrail::CSVExport{} };
-    std::cout << exporter.format(storage, ctrail::ValuesStorageExport::Options::differential) << std::endl;
-    
-    ctrail::ValuesStorageExport exporter2{ ctrail::ChromeTraceExport{} };
-    std::cout << exporter2.format(storage, ctrail::ValuesStorageExport::Options::differential) << std::endl;    
+    // Export the gathered counters
+    const auto export_options = ctrail::ValuesStorageExport::Options::differential;
+    const ctrail::ValuesStorageExport csv_exporter{ ctrail::CSVExport{} };
+    const ctrail::ValuesStorageExport trace_exporter{ ctrail::ChromeTraceExport{} };    
+    std::ofstream("async.csv") << csv_exporter.format(storage, export_options);
+    std::ofstream("async.json") << trace_exporter.format(storage, export_options);
 }

@@ -43,6 +43,10 @@ std::string ChromeTraceExport::composeCounter(const ValuesStorage &_values, std:
     assert( _tmp_buffer_size == time_points );
     _values.copyValuesByCounter(_counter_index, _tmp_buffer, _tmp_buffer_size);
     
+    if( (_options & Options::skip_idle_counters) == Options::skip_idle_counters && 
+        isIdle(_tmp_buffer, _tmp_buffer_size) )
+        return {};
+    
     const std::string prefix = "{\"pid\":1,\"tid\":1,\"name\":\"" +
     counter_name + "\",\"ph\":\"C\",\"ts\":";       
     const auto make_report = [prefix](ValuesStorage::time_point::duration _tp,
@@ -62,7 +66,7 @@ std::string ChromeTraceExport::composeCounter(const ValuesStorage &_values, std:
     const std::size_t start_index = (_options & Options::differential) == Options::differential ?
         1 : 0;
     
-    std::string buf;    
+    std::string buf;
     if ( time_points > start_index ) {
         const auto start_time = time_point_cast<microseconds>(_values.timePoint(start_index));
         
@@ -71,7 +75,7 @@ std::string ChromeTraceExport::composeCounter(const ValuesStorage &_values, std:
             const auto ts = now_time - start_time;
             const auto value = _tmp_buffer[i];
             
-            buf += make_report(ts, value);            
+            buf += make_report(ts, value);
             buf += ",\n";
         }
         
@@ -83,6 +87,11 @@ std::string ChromeTraceExport::composeCounter(const ValuesStorage &_values, std:
         buf += make_report(tombstone_tp - start_time, m_Formatting.tombstone_value);
     }
     return buf;                                                                                            
+}
+
+bool ChromeTraceExport::isIdle(const std::int64_t * const _values, const std::size_t _size) noexcept
+{
+    return std::none_of(_values, _values + _size, [](auto v) { return v != 0; });
 }
 
 }

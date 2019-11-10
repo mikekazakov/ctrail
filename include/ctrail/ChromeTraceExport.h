@@ -24,6 +24,8 @@ public:
                                Options _options) const;
 
 private:
+    static bool isIdle(const std::int64_t * const _values, const std::size_t _size) noexcept;
+    
     Formatting m_Formatting;
 };
 
