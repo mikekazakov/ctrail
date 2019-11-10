@@ -48,7 +48,7 @@ CyclicValuesStorage::timePoint(std::size_t _index) const
 
 void CyclicValuesStorage::copyValuesByTimePoint(
     std::size_t _index, std::int64_t* _buffer,
-    std::size_t _buffer_elements) const
+    [[maybe_unused]] std::size_t _buffer_elements) const
 {
     assert(_index < m_Size);
     assert(_buffer != nullptr);

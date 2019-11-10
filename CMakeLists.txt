@@ -5,8 +5,7 @@ project(ctrail)
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(TARGETS)
 
-
-
+find_package( Threads )
 
 add_library(ctrail
   include/ctrail/Dashboard.h
@@ -39,6 +38,7 @@ target_compile_options(ctrail PRIVATE
 target_include_directories(ctrail 
   PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
+target_link_libraries( ctrail ${CMAKE_THREAD_LIBS_INIT} )
 
 enable_testing()
 add_subdirectory(test)
