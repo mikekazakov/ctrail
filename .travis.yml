@@ -1,13 +1,36 @@
-env:
-  - CMAKE_BUILD_TYPE=Release
-  - CMAKE_BUILD_TYPE=Debug
+matrix:
+include:
+  - os: linux
+    dist: bionic
+    addons:
+      apt:
+        sources: ubuntu-toolchain-r-test
+        packages: g++-7
+    env:
+      - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7" CMAKE_BUILD_TYPE=Release
 
-os: linux
+- os: linux
+  dist: bionic
+  compiler: gcc
+  addons:
+    apt:
+      sources: ubuntu-toolchain-r-test
+      packages: g++-7
+  env:
+    - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7" CMAKE_BUILD_TYPE=Debug
+
+#env:
+#  - CMAKE_BUILD_TYPE=Release
+#  - CMAKE_BUILD_TYPE=Debug
+
+#os: linux
 language: python
 python: "3.7"
-dist: bionic
-compiler:
-  - gcc
+#dist: bionic
+#compiler:
+#  - gcc
+before_install:
+  - eval "${MATRIX_EVAL}"
 install:
   - pip install conan
   - conan user
