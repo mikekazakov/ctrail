@@ -36,12 +36,13 @@ matrix:
     # macOS / Xcode10 / Release  
     - os: osx
       osx_image: xcode10
-      compiler: clang      
+      compiler: clang
+      brew_packages: python
       env:
         - MATRIX_EVAL="" CMAKE_BUILD_TYPE=Release
 
-language: python
-python: "3.6"
+#language: python
+#python: "3.6"
 before_install:
   - eval "${MATRIX_EVAL}"
 install:
