@@ -1,3 +1,7 @@
+env:
+  - CMAKE_BUILD_TYPE=Release
+  - CMAKE_BUILD_TYPE=Debug
+
 os: linux
 language: python
 python: "3.7"
@@ -11,6 +15,6 @@ script:
   - mkdir build
   - cd build
   - conan install ..
-  - cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
+  - cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
   - cmake --build .
   - ctest -V .
