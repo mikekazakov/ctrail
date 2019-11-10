@@ -3,6 +3,7 @@
 #include <time.h>
 #include <ctime>
 #include <iomanip>
+#include <algorithm>
 #include <numeric>
 #include <cassert>
 
