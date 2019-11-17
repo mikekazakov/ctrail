@@ -37,7 +37,10 @@ matrix:
           sources: ubuntu-toolchain-r-test
           packages: g++-8
       env:
-        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8" CMAKE_BUILD_TYPE=Release CMAKE_CXX_FLAGS="-fsanitize=address -fno-omit-frame-pointer"        
+        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
+        - CMAKE_BUILD_TYPE=Release
+        - CMAKE_CXX_FLAGS="-fsanitize=address -fno-omit-frame-pointer"
+        - ASAN_OPTIONS="verbosity=1"
 
     # Linux / GCC8 / Debug
     - os: linux
