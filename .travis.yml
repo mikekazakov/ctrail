@@ -25,6 +25,19 @@ matrix:
           packages: g++-8
       env:
         - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8" CMAKE_BUILD_TYPE=Release
+    
+    # Linux / GCC8 / ASAN (Release)      
+    - os: linux
+      dist: bionic
+      compiler: gcc
+      language: python
+      python: "3.6"            
+      addons:
+        apt:
+          sources: ubuntu-toolchain-r-test
+          packages: g++-8
+      env:
+        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8" CMAKE_BUILD_TYPE=Release CMAKE_CXX_FLAGS="-fsanitize=address -fno-omit-frame-pointer"        
 
     # Linux / GCC8 / Debug
     - os: linux
@@ -56,6 +69,6 @@ script:
   - mkdir build
   - cd build
   - conan install ..
-  - cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+  - cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DCMAKE_CXX_FLAGS=\"${CMAKE_CXX_FLAGS}\"
   - cmake --build .
   - ctest -V .
