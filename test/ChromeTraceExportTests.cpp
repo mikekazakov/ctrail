@@ -1,6 +1,6 @@
 #include <catch2/catch.hpp>
 #include <array>
-#include <ctrail/ChromeTraceExport.h>
+#include <ctrail/ChromeTraceExporter.h>
 #include <ctrail/MonotonicValuesStorage.h>
 
 #include <iostream>
@@ -23,10 +23,10 @@ static time_t to_local(time_t _time)
 
 TEST_CASE(PREFIX"properly composes counters")
 {
-    const auto none = ValuesStorageExport::Options::none;
-    const auto diff = ValuesStorageExport::Options::differential;
+    const auto none = ValuesStorageExporter::Options::none;
+    const auto diff = ValuesStorageExporter::Options::differential;
     
-    ChromeTraceExport exporter;
+    ChromeTraceExporter exporter;
     
     std::int64_t buf[3];
     ValuesStorage storage{ MonotonicValuesStorage{{"a", "b", "c"}} };
@@ -109,10 +109,10 @@ TEST_CASE(PREFIX"properly composes counters")
 
 TEST_CASE(PREFIX"properly composes a trace")
 {
-    const auto none = ValuesStorageExport::Options::none;
-    const auto diff = ValuesStorageExport::Options::differential;
+    const auto none = ValuesStorageExporter::Options::none;
+    const auto diff = ValuesStorageExporter::Options::differential;
     
-    ValuesStorageExport  exporter{ ChromeTraceExport{} };
+    ValuesStorageExporter  exporter{ ChromeTraceExporter{} };
     ValuesStorage storage{ MonotonicValuesStorage{{"a", "b", "c"}} };
     
     SECTION("Empty") {

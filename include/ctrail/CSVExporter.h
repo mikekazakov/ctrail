@@ -1,11 +1,11 @@
 #pragma once
 
-#include <ctrail/ValuesStorageExport.h>
+#include <ctrail/ValuesStorageExporter.h>
 #include <string>
 
 namespace ctrail {
 
-class CSVExport /* conforms to the ValuesStorageExport 'concept' */
+class CSVExporter /* conforms to the ValuesStorageExporter 'concept' */
 {
 public:
     struct Formatting {
@@ -13,10 +13,10 @@ public:
         std::string values_delimiter = ",";
         std::string newline_delimiter = "\n";
     };
-    using Options = ValuesStorageExport::Options;
+    using Options = ValuesStorageExporter::Options;
     
-    CSVExport();
-    CSVExport( const Formatting &_formatting );
+    CSVExporter();
+    CSVExporter( const Formatting &_formatting );
     
     std::string format(const ValuesStorage &_values, Options _options) const;
 

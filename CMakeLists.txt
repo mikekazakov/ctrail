@@ -16,9 +16,9 @@ add_library(ctrail
   include/ctrail/ValuesStorage.h
   include/ctrail/MonotonicValuesStorage.h  
   include/ctrail/CyclicValuesStorage.h
-  include/ctrail/ValuesStorageExport.h
-  include/ctrail/CSVExport.h
-  include/ctrail/ChromeTraceExport.h
+  include/ctrail/ValuesStorageExporter.h
+  include/ctrail/CSVExporter.h
+  include/ctrail/ChromeTraceExporter.h
   src/Dashboard.cpp
   src/DashboardImpl.cpp
   src/Registry.cpp
@@ -26,9 +26,9 @@ add_library(ctrail
   src/ValuesStorage.cpp
   src/MonotonicValuesStorage.cpp
   src/CyclicValuesStorage.cpp
-  src/ValuesStorageExport.cpp
-  src/CSVExport.cpp
-  src/ChromeTraceExport.cpp
+  src/ValuesStorageExporter.cpp
+  src/CSVExporter.cpp
+  src/ChromeTraceExporter.cpp
 )
 
 target_compile_features(ctrail PUBLIC cxx_std_17)

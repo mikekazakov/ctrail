@@ -1,19 +1,19 @@
-#include <ctrail/ChromeTraceExport.h>
+#include <ctrail/ChromeTraceExporter.h>
 #include <numeric>
 #include <algorithm>
 #include <cassert>
 
 namespace ctrail {
 
-ChromeTraceExport::ChromeTraceExport()
+ChromeTraceExporter::ChromeTraceExporter()
 {
 }
 
-ChromeTraceExport::ChromeTraceExport( const Formatting &_formatting ):
+ChromeTraceExporter::ChromeTraceExporter( const Formatting &_formatting ):
     m_Formatting(_formatting)
 {}
 
-std::string ChromeTraceExport::format(const ValuesStorage &_values, Options _options) const
+std::string ChromeTraceExporter::format(const ValuesStorage &_values, Options _options) const
 {
     std::string trace;    
     trace += "{\"traceEvents\":[\n";    
@@ -32,7 +32,7 @@ std::string ChromeTraceExport::format(const ValuesStorage &_values, Options _opt
     return trace;
 }
 
-std::string ChromeTraceExport::composeCounter(const ValuesStorage &_values, std::size_t _counter_index,
+std::string ChromeTraceExporter::composeCounter(const ValuesStorage &_values, std::size_t _counter_index,
                                             std::int64_t *_tmp_buffer, std::size_t _tmp_buffer_size,
                                               Options _options) const
 {
@@ -91,7 +91,7 @@ std::string ChromeTraceExport::composeCounter(const ValuesStorage &_values, std:
     return buf;                                                                                            
 }
 
-bool ChromeTraceExport::isIdle(const std::int64_t * const _values, const std::size_t _size) noexcept
+bool ChromeTraceExporter::isIdle(const std::int64_t * const _values, const std::size_t _size) noexcept
 {
     return std::none_of(_values, _values + _size, [](auto v) { return v != 0; });
 }

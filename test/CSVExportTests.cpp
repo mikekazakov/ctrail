@@ -1,6 +1,6 @@
 #include <catch2/catch.hpp>
 #include <array>
-#include <ctrail/CSVExport.h>
+#include <ctrail/CSVExporter.h>
 #include <ctrail/MonotonicValuesStorage.h>
 
 using namespace ctrail;
@@ -19,59 +19,59 @@ static time_t to_local(time_t _time)
 
 TEST_CASE(PREFIX"properly composes headers")
 {
-    CSVExport exporter;
+    CSVExporter exporter;
     
     ValuesStorage storage{ MonotonicValuesStorage{{"a", "b", "c"}} };
     { // default options
-        auto headers = exporter.composeHeaders(storage, ValuesStorageExport::Options::none);
+        auto headers = exporter.composeHeaders(storage, ValuesStorageExporter::Options::none);
         CHECK( headers == "counter\n" );
     }
     { // "differential"
-        auto headers = exporter.composeHeaders(storage, ValuesStorageExport::Options::differential);
+        auto headers = exporter.composeHeaders(storage, ValuesStorageExporter::Options::differential);
         CHECK( headers == "counter\n" );
     }
     
     storage.addValues(system_clock::from_time_t(to_local(1)),
                       std::array{i64(10), i64(11), i64(13)}.data(), 3);
     { // default options
-        auto headers = exporter.composeHeaders(storage, ValuesStorageExport::Options::none);
+        auto headers = exporter.composeHeaders(storage, ValuesStorageExporter::Options::none);
         CHECK( headers == "counter,1970-01-01T00:00:01.000\n" );
     }
     { // "differential"
-        auto headers = exporter.composeHeaders(storage, ValuesStorageExport::Options::differential);
+        auto headers = exporter.composeHeaders(storage, ValuesStorageExporter::Options::differential);
         CHECK( headers == "counter\n" );
     }
     
     storage.addValues(system_clock::from_time_t(to_local(2)),
                       std::array{i64(20), i64(22), i64(26)}.data(), 3);
     { // default options
-        auto headers = exporter.composeHeaders(storage, ValuesStorageExport::Options::none);
+        auto headers = exporter.composeHeaders(storage, ValuesStorageExporter::Options::none);
         CHECK( headers == "counter,1970-01-01T00:00:01.000,1970-01-01T00:00:02.000\n" );
     }
     { // "differential"
-        auto headers = exporter.composeHeaders(storage, ValuesStorageExport::Options::differential);
+        auto headers = exporter.composeHeaders(storage, ValuesStorageExporter::Options::differential);
         CHECK( headers == "counter,1970-01-01T00:00:02.000\n" );
     }
     
     storage.addValues(system_clock::from_time_t(to_local(3)),
                       std::array{i64(30), i64(33), i64(39)}.data(), 3);
     { // "default options"
-        auto headers = exporter.composeHeaders(storage, ValuesStorageExport::Options::none);
+        auto headers = exporter.composeHeaders(storage, ValuesStorageExporter::Options::none);
         CHECK( headers == "counter,1970-01-01T00:00:01.000,1970-01-01T00:00:02.000,1970-01-01T00:00:03.000\n" );
     }
     { // "differential"
-        auto headers = exporter.composeHeaders(storage, ValuesStorageExport::Options::differential);
+        auto headers = exporter.composeHeaders(storage, ValuesStorageExporter::Options::differential);
         CHECK( headers == "counter,1970-01-01T00:00:02.000,1970-01-01T00:00:03.000\n" );
     }
 }
 
 TEST_CASE(PREFIX"properly composes rows")
 {
-    const auto none = ValuesStorageExport::Options::none;
-    const auto diff = ValuesStorageExport::Options::differential;
-    const auto skip = ValuesStorageExport::Options::skip_idle_counters;
+    const auto none = ValuesStorageExporter::Options::none;
+    const auto diff = ValuesStorageExporter::Options::differential;
+    const auto skip = ValuesStorageExporter::Options::skip_idle_counters;
     
-    CSVExport exporter;
+    CSVExporter exporter;
     
     std::int64_t buf[3];
     ValuesStorage storage{ MonotonicValuesStorage{{"a", "b", "c"}} };
@@ -125,9 +125,9 @@ TEST_CASE(PREFIX"properly composes rows")
 
 TEST_CASE(PREFIX"skips rows when asked to")
 {
-    const auto none = ValuesStorageExport::Options::none;
-    const auto diff = ValuesStorageExport::Options::differential;
-    const auto skip = ValuesStorageExport::Options::skip_idle_counters;
+    const auto none = ValuesStorageExporter::Options::none;
+    const auto diff = ValuesStorageExporter::Options::differential;
+    const auto skip = ValuesStorageExporter::Options::skip_idle_counters;
         
     ValuesStorage storage{ MonotonicValuesStorage{{"a", "b", "c"}} };
     storage.addValues(system_clock::from_time_t(to_local(1)),
@@ -136,7 +136,7 @@ TEST_CASE(PREFIX"skips rows when asked to")
                       std::array{i64(20), i64(0), i64(26)}.data(), 3);    
 
     std::int64_t buf[3];
-    CSVExport exporter;        
+    CSVExporter exporter;        
     CHECK( exporter.composeRow(storage, 0, buf, 2, none) == "a,10,20\n" );
     CHECK( exporter.composeRow(storage, 1, buf, 2, none) == "b,0,0\n" );
     CHECK( exporter.composeRow(storage, 2, buf, 2, none) == "c,13,26\n" );
@@ -153,7 +153,7 @@ TEST_CASE(PREFIX"skips rows when asked to")
 
 TEST_CASE(PREFIX"properly composes a CSV")
 {
-    CSVExport exporter;
+    CSVExporter exporter;
     
     ValuesStorage storage{ MonotonicValuesStorage{{"a", "b", "c"}} };
     storage.addValues(system_clock::from_time_t(to_local(1)),
@@ -163,7 +163,7 @@ TEST_CASE(PREFIX"properly composes a CSV")
     storage.addValues(system_clock::from_time_t(to_local(3)),
                       std::array{i64(30), i64(33), i64(39)}.data(), 3);
     
-    const std::string csv = exporter.format(storage, ValuesStorageExport::Options::none);
+    const std::string csv = exporter.format(storage, ValuesStorageExporter::Options::none);
     CHECK( csv ==
           "counter,1970-01-01T00:00:01.000,1970-01-01T00:00:02.000,1970-01-01T00:00:03.000\n"
           "a,10,20,30\n"
@@ -171,7 +171,7 @@ TEST_CASE(PREFIX"properly composes a CSV")
           "c,13,26,39\n");
     
     const std::string csv_diff = exporter.format(storage,
-                                                 ValuesStorageExport::Options::differential);
+                                                 ValuesStorageExporter::Options::differential);
     CHECK( csv_diff ==
           "counter,1970-01-01T00:00:02.000,1970-01-01T00:00:03.000\n"
           "a,10,10\n"

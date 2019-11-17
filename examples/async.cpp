@@ -1,6 +1,6 @@
-#include <ctrail/ValuesStorageExport.h>
-#include <ctrail/CSVExport.h>
-#include <ctrail/ChromeTraceExport.h>
+#include <ctrail/ValuesStorageExporter.h>
+#include <ctrail/CSVExporter.h>
+#include <ctrail/ChromeTraceExporter.h>
 #include <ctrail/MonotonicValuesStorage.h>
 #include <ctrail/RegistryImpl.h>
 #include <ctrail/DashboardImpl.h>
@@ -67,9 +67,9 @@ int main()
     watchdog.join();
     
     // Export the gathered counters
-    const auto export_options = ctrail::ValuesStorageExport::Options::differential;
-    const ctrail::ValuesStorageExport csv_exporter{ ctrail::CSVExport{} };
-    const ctrail::ValuesStorageExport trace_exporter{ ctrail::ChromeTraceExport{} };    
+    const auto export_options = ctrail::ValuesStorageExporter::Options::differential;
+    const ctrail::ValuesStorageExporter csv_exporter{ ctrail::CSVExporter{} };
+    const ctrail::ValuesStorageExporter trace_exporter{ ctrail::ChromeTraceExporter{} };    
     std::ofstream("async.csv") << csv_exporter.format(storage, export_options);
     std::ofstream("async.json") << trace_exporter.format(storage, export_options);
 }

@@ -1,4 +1,4 @@
-#include <ctrail/CSVExport.h>
+#include <ctrail/CSVExporter.h>
 #include <sstream>
 #include <time.h>
 #include <ctime>
@@ -9,14 +9,14 @@
 
 namespace ctrail {
 
-CSVExport::CSVExport() = default;
+CSVExporter::CSVExporter() = default;
     
-CSVExport::CSVExport( const Formatting &_formatting ):
+CSVExporter::CSVExporter( const Formatting &_formatting ):
     m_Formatting(_formatting)
 {
 }
 
-std::string CSVExport::format(const ValuesStorage &_values, Options _options) const
+std::string CSVExporter::format(const ValuesStorage &_values, Options _options) const
 {
     std::string csv;
     csv += composeHeaders(_values, _options);
@@ -30,7 +30,7 @@ std::string CSVExport::format(const ValuesStorage &_values, Options _options) co
     return csv;
 }
     
-std::string CSVExport::composeHeaders(const ValuesStorage &_values, Options _options) const
+std::string CSVExporter::composeHeaders(const ValuesStorage &_values, Options _options) const
 {
     std::string buf;
     buf += m_Formatting.counters_column_title;
@@ -53,12 +53,12 @@ std::string CSVExport::composeHeaders(const ValuesStorage &_values, Options _opt
     return buf;
 }
 
-bool CSVExport::isIdle(const std::int64_t * const _values, const std::size_t _size) noexcept
+bool CSVExporter::isIdle(const std::int64_t * const _values, const std::size_t _size) noexcept
 {
     return std::none_of(_values, _values + _size, [](auto v) { return v != 0; });
 }
 
-std::string CSVExport::composeRow(const ValuesStorage &_values, std::size_t _counter_index,
+std::string CSVExporter::composeRow(const ValuesStorage &_values, std::size_t _counter_index,
                                   std::int64_t *_tmp_buffer, std::size_t _tmp_buffer_size,
                                   Options _options) const
 {
@@ -97,7 +97,7 @@ std::string CSVExport::composeRow(const ValuesStorage &_values, std::size_t _cou
     return buf;
 }
 
-std::string CSVExport::fmtTime(std::chrono::system_clock::time_point _tp)
+std::string CSVExporter::fmtTime(std::chrono::system_clock::time_point _tp)
 {
     using namespace std::chrono;
     const auto time = system_clock::to_time_t(_tp);

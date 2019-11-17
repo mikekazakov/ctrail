@@ -1,21 +1,21 @@
 #pragma once
 
-#include <ctrail/ValuesStorageExport.h>
+#include <ctrail/ValuesStorageExporter.h>
 #include <string>
 
 namespace ctrail {
 
-class ChromeTraceExport /* conforms to the ValuesStorageExport 'concept' */
+class ChromeTraceExporter /* conforms to the ValuesStorageExporter 'concept' */
 {
 public:
     struct Formatting {
         std::chrono::milliseconds tombstone_offset = std::chrono::milliseconds(100); 
         std::int64_t tombstone_value = 0;
     };
-    using Options = ValuesStorageExport::Options;
+    using Options = ValuesStorageExporter::Options;
 
-    ChromeTraceExport();
-    ChromeTraceExport( const Formatting &_formatting );
+    ChromeTraceExporter();
+    ChromeTraceExporter( const Formatting &_formatting );
     
     std::string format(const ValuesStorage &_values, Options _options) const;
 
