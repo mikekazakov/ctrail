@@ -19,6 +19,7 @@ add_library(ctrail
   include/ctrail/ValuesStorageExporter.h
   include/ctrail/CSVExporter.h
   include/ctrail/ChromeTraceExporter.h
+  include/ctrail/OneShotMonitor.h
   src/Dashboard.cpp
   src/DashboardImpl.cpp
   src/Registry.cpp
@@ -29,6 +30,7 @@ add_library(ctrail
   src/ValuesStorageExporter.cpp
   src/CSVExporter.cpp
   src/ChromeTraceExporter.cpp
+  src/OneShotMonitor.cpp
 )
 
 target_compile_features(ctrail PUBLIC cxx_std_17)
