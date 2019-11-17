@@ -11,7 +11,8 @@ matrix:
           sources: ubuntu-toolchain-r-test
           packages: g++-7
       env:
-        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7" CMAKE_BUILD_TYPE=Release
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+        - CMAKE_BUILD_TYPE=Release
 
     # Linux / GCC8 / Release  
     - os: linux
@@ -24,7 +25,8 @@ matrix:
           sources: ubuntu-toolchain-r-test
           packages: g++-8
       env:
-        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8" CMAKE_BUILD_TYPE=Release
+        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
+        - CMAKE_BUILD_TYPE=Release
     
     # Linux / GCC8 / ASAN (Release)      
     - os: linux
@@ -53,7 +55,8 @@ matrix:
           sources: ubuntu-toolchain-r-test
           packages: g++-8
       env:
-        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8" CMAKE_BUILD_TYPE=Debug
+        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
+        - CMAKE_BUILD_TYPE=Debug
 
     # macOS / Xcode10 / Release  
     - os: osx
@@ -61,7 +64,8 @@ matrix:
       compiler: clang
       brew_packages: python
       env:
-        - MATRIX_EVAL="" CMAKE_BUILD_TYPE=Release
+        - MATRIX_EVAL=""
+        - CMAKE_BUILD_TYPE=Release
 
 before_install:
   - eval "${MATRIX_EVAL}"
