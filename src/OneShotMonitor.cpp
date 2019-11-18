@@ -2,6 +2,7 @@
 #include <ctrail/MonotonicValuesStorage.h>
 #include <thread>
 #include <iostream>
+#include <cassert>
 
 namespace ctrail {
 
