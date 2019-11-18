@@ -15,7 +15,7 @@ public:
         skip_idle_counters = 2
     };
     template <class T>
-    ValuesStorageExporter(T _impl);
+    explicit ValuesStorageExporter(T _impl);
     ValuesStorageExporter(const ValuesStorageExporter& _rhs);
     ValuesStorageExporter(ValuesStorageExporter&& _rhs) noexcept;
     

@@ -5,33 +5,14 @@
 
 namespace ctrail {
 
-class OneShotMonitor::Impl
-{
-public:
-    Impl(Params _params);
-    ~Impl();
-    
-private:
-    void monitor();
-    void save( std::string _exported_trail );
-
-    std::thread m_WorkerThread;
-    const Dashboard * const m_Dashboard = nullptr;
-    const std::chrono::nanoseconds m_Period;
-    const std::chrono::nanoseconds m_Duration;
-    const ValuesStorageExporter m_Exporter;    
-    const ValuesStorageExporter::Options m_ExportOptions;
-    ValuesStorage m_Storage;
-    const std::function<void(std::string)> m_Save;
-};
-
-OneShotMonitor::Impl::Impl(Params _params):
+OneShotMonitor::OneShotMonitor( Params _params ):
     m_Dashboard{_params.dashboard},
     m_Period{ _params.period },
     m_Duration{ _params.duration },
     m_Exporter{ std::move(_params.exporter) },
     m_ExportOptions{ _params.export_options },
-    m_Storage{ MonotonicValuesStorage{ _params.dashboard->names() } }
+    m_Storage{ MonotonicValuesStorage{ _params.dashboard->names() } },
+    m_Save{ std::move(_params.save) }
 {
     if( m_Period.count() < 0 )
         throw std::invalid_argument("OneShotMonitor: period must be non-negative");
@@ -41,25 +22,29 @@ OneShotMonitor::Impl::Impl(Params _params):
     m_WorkerThread = std::thread( [this]{ monitor(); } );
 }
 
-OneShotMonitor::Impl::~Impl()
+OneShotMonitor::~OneShotMonitor()
 {
     if( m_WorkerThread.joinable() )
         m_WorkerThread.join();
 }
 
-void OneShotMonitor::Impl::monitor()
+void OneShotMonitor::join()
 {
-    const auto start = std::chrono::system_clock::now();
-    while( start + m_Duration < std::chrono::system_clock::now() ) {
+    if( m_WorkerThread.joinable() )
+        m_WorkerThread.join();
+}
+
+void OneShotMonitor::monitor()
+{
+    fire( m_Period, m_Duration, [this]{
         const auto values = m_Dashboard->values();
-        const auto now = std::chrono::system_clock::now();
+        const auto now = nowOnSystemClock();
         m_Storage.addValues(now, values.data(), values.size());
-        std::this_thread::sleep_for(m_Period);            
-    }
+    });
     save( m_Exporter.format(m_Storage, m_ExportOptions) );
 }
 
-void OneShotMonitor::Impl::save( std::string _exported_trail )
+void OneShotMonitor::save( std::string _exported_trail )
 {
     if( m_Save ) {
         m_Save( std::move(_exported_trail) );
@@ -69,11 +54,21 @@ void OneShotMonitor::Impl::save( std::string _exported_trail )
     }
 }
 
-OneShotMonitor::OneShotMonitor( Params _params ):
-    I{ std::make_unique<Impl>( std::move(_params) ) }
+std::chrono::system_clock::time_point OneShotMonitor::nowOnSystemClock() const noexcept
 {
+    return std::chrono::system_clock::now(); 
 }
 
-OneShotMonitor::~OneShotMonitor() = default;
+void OneShotMonitor::fire( std::chrono::nanoseconds _period, std::chrono::nanoseconds _duration, std::function<void()> _job )
+{
+    assert( _job );
+    assert( _period.count() > 0 );
+    assert( _duration.count() > 0 );
+    const auto start = std::chrono::steady_clock::now();
+    while( std::chrono::steady_clock::now() < start + _duration ) {
+        _job();
+        std::this_thread::sleep_for(_period);
+    }         
+}
 
 }

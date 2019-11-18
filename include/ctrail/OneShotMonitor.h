@@ -7,6 +7,7 @@
 #include <memory>
 #include <chrono>
 #include <functional>
+#include <thread>
 
 namespace ctrail {
 
@@ -23,14 +24,26 @@ public:
     };
     OneShotMonitor( Params _params );
     OneShotMonitor( const OneShotMonitor & ) = delete;
-    OneShotMonitor( OneShotMonitor && ) noexcept = default;
-    ~OneShotMonitor();
+    virtual ~OneShotMonitor();
     OneShotMonitor& operator=(const OneShotMonitor & ) = delete;
-    OneShotMonitor& operator=(OneShotMonitor && ) = default;
+    
+protected:
+    virtual std::chrono::system_clock::time_point nowOnSystemClock() const noexcept;
+    virtual void fire( std::chrono::nanoseconds _period, std::chrono::nanoseconds _duration, std::function<void()> _job );
+    void join();
 
 private:
-    class Impl;
-    std::unique_ptr<Impl> I; 
+    void monitor();
+    void save( std::string _exported_trail );
+
+    std::thread m_WorkerThread;
+    const Dashboard * const m_Dashboard = nullptr;
+    const std::chrono::nanoseconds m_Period;
+    const std::chrono::nanoseconds m_Duration;
+    const ValuesStorageExporter m_Exporter;    
+    const ValuesStorageExporter::Options m_ExportOptions;
+    ValuesStorage m_Storage;
+    const std::function<void(std::string)> m_Save;
 };
 
 }
