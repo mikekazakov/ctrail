@@ -57,11 +57,11 @@ matrix:
       env:
         - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
         - CMAKE_BUILD_TYPE=Debug
-        - CMAKE_CXX_FLAGS="-g -O0 -fprofile-arcs -ftest-coverage "
+        - CMAKE_CXX_FLAGS="-g -O0 -fprofile-arcs -ftest-coverage"
         - CMAKE_EXE_LINKER_FLAGS="--coverage"
         - ASAN_OPTIONS="verbosity=1"
-    after_success:
-      - bash <(curl -s https://codecov.io/bash)
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
 
     # Linux / GCC8 / Debug
     - os: linux
