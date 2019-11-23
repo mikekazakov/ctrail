@@ -15,4 +15,4 @@ build_script:
   - conan install ..
   - cmake ../  -G "Visual Studio 15 2017 Win64"
   - cmake --build . --config Release --parallel 2
-  - ctest -V .
+  - ctest -V  -C Release .
