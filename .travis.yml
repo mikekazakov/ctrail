@@ -111,6 +111,7 @@ matrix:
       script:
         - mkdir build && cd build
         - g++ -std=c++17 ../src/CTrail-all.cpp -I../include -c
+        - g++ -std=c++17 ../examples/async.cpp CTrail-all.o -I./include -o async
 
     # macOS / Xcode11 / Release  
     - os: osx
