@@ -21,11 +21,13 @@ void CyclicValuesStorage::addValues(time_point _time_point,
                                     std::size_t _values_number)
 {
     assert(_values_number == m_CountersNumber);
-    assert(_values != nullptr);
     assert(m_Head < m_Capacity);
     m_TimePoints[m_Head] = _time_point;
-    std::copy(_values, _values + _values_number,
-              m_Values.data() + (m_Head * m_CountersNumber));
+    if( _values_number > 0 ) {
+        assert(_values != nullptr);
+        std::copy(_values, _values + _values_number,
+            m_Values.data() + (m_Head * m_CountersNumber));
+    }
     m_Head = (m_Head + 1) % m_Capacity;
     m_Size = std::min(m_Size + 1, m_Capacity);
 }

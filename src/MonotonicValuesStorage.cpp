@@ -17,9 +17,11 @@ void MonotonicValuesStorage::addValues(const time_point _time_point,
                                        const std::size_t _values_number)
 {
     assert(_values_number == m_CountersNumber);
-    assert(_values != nullptr);
-    m_TimePoints.push_back(_time_point);
-    m_Values.insert(m_Values.end(), _values, _values + _values_number);
+    m_TimePoints.push_back(_time_point);    
+    if( _values_number > 0 ) {
+        assert(_values != nullptr);
+        m_Values.insert(m_Values.end(), _values, _values + _values_number);
+    }
 }
 
 std::size_t MonotonicValuesStorage::timePointsNumber() const

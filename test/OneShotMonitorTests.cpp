@@ -107,3 +107,25 @@ TEST_CASE(PREFIX"Throws on nullptr dashboard")
     OneShotMonitor::Params params;
     CHECK_THROWS_AS( MonitorWithStubs{std::move(params)}, std::invalid_argument );
 }
+
+TEST_CASE(PREFIX"Finishes when uses real clocks ")
+{
+    DashboardImpl dashboard{ RegistryImpl{}.bake() };
+    
+    std::string result;
+    OneShotMonitor::Params params;
+    params.dashboard = &dashboard;
+    params.period = std::chrono::milliseconds{1};
+    params.duration = std::chrono::milliseconds{10};
+    params.exporter = ValuesStorageExporter{ Exporter{} };
+    params.save = [&](std::string _exported){ result = "done"; };
+    
+    SECTION("using join()") {
+        MonitorWithStubs monitor{ std::move(params) };
+        monitor.join();
+    }
+    SECTION("using desctructor") {
+        MonitorWithStubs monitor{ std::move(params) };
+    }
+    CHECK( result == "done" );
+}
