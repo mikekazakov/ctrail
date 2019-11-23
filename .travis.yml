@@ -134,6 +134,28 @@ matrix:
         - g++ -std=c++17 -I../include ../src/CTrail-all.cpp -c
         - g++ -std=c++17 -I../include ../examples/async.cpp CTrail-all.o -pthread -o async
 
+    - name: "Linux / clang7 / Release / MSAN"
+      os: linux
+      dist: bionic
+      compiler: clang
+      addons:
+        apt:
+          sources: llvm-toolchain-bionic-7
+          packages: clang-7          
+      env:
+        - CC=clang-7
+        - CXX=clang++-7
+        - FLAGS=-fsanitize=memory -fPIE -pie -fno-omit-frame-pointer
+      install:
+        - pip install conan
+        - conan user
+      script:
+        - mkdir build && cd build
+        - conan install ..
+        - cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${FLAGS}" -DCMAKE_EXE_LINKER_FLAGS="${FLAGS}"
+        - cmake --build . --parallel 2
+        - ctest -V .
+
     - name: "macOS / Xcode11 / Release"
       os: osx
       osx_image: xcode11
