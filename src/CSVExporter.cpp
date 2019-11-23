@@ -1,4 +1,5 @@
 #include <ctrail/CSVExporter.h>
+#include <ctrail/Ports.h>
 #include <sstream>
 #include <time.h>
 #include <ctime>
@@ -101,15 +102,8 @@ std::string CSVExporter::fmtTime(std::chrono::system_clock::time_point _tp)
 {
     using namespace std::chrono;
     const auto time = system_clock::to_time_t(_tp);
-
-    struct tm tm;
-#if _MSC_VER >= 1400
-    localtime_s(&tm, &time);
-#else    
-    localtime_r(&time, &tm);
-#endif
-    
-    auto ms = duration_cast<milliseconds>(_tp.time_since_epoch()) % 1000;
+    const struct tm tm = internal::localtime(time);    
+    const auto ms = duration_cast<milliseconds>(_tp.time_since_epoch()) % 1000;
     
     std::stringstream ss;
     ss << std::put_time( &tm, "%FT%T" ) << "." << std::setfill('0') << std::setw(3) << ms.count();

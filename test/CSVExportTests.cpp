@@ -2,6 +2,7 @@
 #include <array>
 #include <ctrail/CSVExporter.h>
 #include <ctrail/MonotonicValuesStorage.h>
+#include <ctrail/Ports.h>
 
 using namespace ctrail;
 using std::chrono::system_clock;
@@ -11,8 +12,7 @@ using i64 = std::int64_t;
 
 static time_t to_local(time_t _time)
 {
-    struct tm tm;
-    gmtime_r(&_time, &tm);
+    struct tm tm = internal::gmtime(_time);
     tm.tm_isdst = -1;
     return mktime(&tm);
 }
