@@ -103,7 +103,11 @@ std::string CSVExporter::fmtTime(std::chrono::system_clock::time_point _tp)
     const auto time = system_clock::to_time_t(_tp);
 
     struct tm tm;
+#if _MSC_VER >= 1400
+    localtime_s(&time, &tm);
+#else    
     localtime_r(&time, &tm);
+#endif
     
     auto ms = duration_cast<milliseconds>(_tp.time_since_epoch()) % 1000;
     
