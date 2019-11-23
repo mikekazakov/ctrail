@@ -1,7 +1,7 @@
 matrix:
-  include:
-    # Linux / GCC7 / Release  
-    - os: linux
+  include:   
+    - name: "Linux / GCC7 / Release" 
+      os: linux
       dist: bionic
       compiler: gcc
       language: python
@@ -23,8 +23,8 @@ matrix:
         - cmake --build . --parallel 2
         - ctest -V .
 
-    # Linux / GCC8 / Release  
-    - os: linux
+    - name: "Linux / GCC8 / Release"
+      os: linux
       dist: bionic
       compiler: gcc
       language: python
@@ -69,8 +69,8 @@ matrix:
         - cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-fsanitize=address -fno-omit-frame-pointer" -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=address"
         - cmake --build . --parallel 2
         - ctest -V .
-               
-    - name: "Linux / GCC8 / Release / UBSAN" 
+
+    - name: "Linux / GCC8 / Release / UBSAN"
       os: linux
       dist: bionic
       compiler: gcc
@@ -93,8 +93,8 @@ matrix:
         - cmake --build . --parallel 2
         - ctest -V .        
 
-    # Linux / GCC8 / Debug + GCOV      
-    - os: linux
+    - name: "Linux / GCC8 / Debug / GCOV"
+      os: linux
       dist: bionic
       compiler: gcc
       language: python
@@ -118,8 +118,8 @@ matrix:
       after_success:
         - bash <(curl -s https://codecov.io/bash)
 
-    # Linux / GCC8 / Single source file      
-    - os: linux
+    - name: "Linux / GCC8 / Single source file"
+      os: linux
       dist: bionic
       compiler: gcc
       addons:
@@ -134,8 +134,8 @@ matrix:
         - g++ -std=c++17 -I../include ../src/CTrail-all.cpp -c
         - g++ -std=c++17 -I../include ../examples/async.cpp CTrail-all.o -pthread -o async
 
-    # macOS / Xcode11 / Release  
-    - os: osx
+    - name: "macOS / Xcode11 / Release"
+      os: osx
       osx_image: xcode11
       compiler: clang
       brew_packages: python
