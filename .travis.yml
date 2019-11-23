@@ -22,19 +22,27 @@ matrix:
         - cmake --build . --parallel 2
         - ctest -V .
 
-#    # Linux / GCC8 / Release  
-#    - os: linux
-#      dist: bionic
-#      compiler: gcc
-#      language: python
-#      python: "3.6"            
-#      addons:
-#        apt:
-#          sources: ubuntu-toolchain-r-test
-#          packages: g++-8
-#      env:
-#        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
-#        - CMAKE_BUILD_TYPE=Release
+    # Linux / GCC8 / Release  
+    - os: linux
+      dist: bionic
+      compiler: gcc
+      language: python
+      python: "3.6"            
+      addons:
+        apt:
+          sources: ubuntu-toolchain-r-test
+          packages: g++-8
+      before_install:
+          - eval "CC=gcc-8 && CXX=g++-8"
+      install:
+        - pip install conan
+        - conan user
+      script:
+        - mkdir build && cd build
+        - conan install ..
+        - cmake .. -DCMAKE_BUILD_TYPE=Release
+        - cmake --build . --parallel 2
+        - ctest -V .        
 #    
 #    # Linux / GCC8 / ASAN (Release)      
 #    - os: linux
