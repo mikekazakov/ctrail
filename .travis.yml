@@ -69,6 +69,29 @@ matrix:
         - cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-fsanitize=address -fno-omit-frame-pointer" -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=address"
         - cmake --build . --parallel 2
         - ctest -V .
+        
+    # Linux / GCC8 / UBSAN (Release)      
+    - os: linux
+      dist: bionic
+      compiler: gcc
+      language: python
+      python: "3.6"            
+      addons:
+        apt:
+          sources: ubuntu-toolchain-r-test
+          packages: g++-8
+      env:
+        - CC=gcc-8
+        - CXX=g++-8
+      install:
+        - pip install conan
+        - conan user
+      script:
+        - mkdir build && cd build
+        - conan install ..
+        - cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-fsanitize=undefined" -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=undefined"
+        - cmake --build . --parallel 2
+        - ctest -V .        
 
     # Linux / GCC8 / Debug + GCOV      
     - os: linux
