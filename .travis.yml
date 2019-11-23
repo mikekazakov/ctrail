@@ -138,6 +138,8 @@ matrix:
       os: linux
       dist: bionic
       compiler: clang
+      language: python
+      python: "3.6"
       addons:
         apt:
           sources: llvm-toolchain-bionic-7
