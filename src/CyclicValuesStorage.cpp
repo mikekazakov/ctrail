@@ -1,6 +1,6 @@
 #include <ctrail/CyclicValuesStorage.h>
 #include <cassert>
-#include <<algorithm>
+#include <algorithm>
 
 namespace ctrail {
 
