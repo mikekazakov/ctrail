@@ -5,6 +5,7 @@
 #include "DashboardImpl.cpp"
 #include "MonotonicValuesStorage.cpp"
 #include "OneShotMonitor.cpp"
+#include "Ports.cpp"
 #include "Registry.cpp"
 #include "RegistryImpl.cpp"
 #include "ValuesStorage.cpp"
