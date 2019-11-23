@@ -134,7 +134,7 @@ matrix:
         - g++ -std=c++17 -I../include ../src/CTrail-all.cpp -c
         - g++ -std=c++17 -I../include ../examples/async.cpp CTrail-all.o -pthread -o async
 
-    - name: "Linux / clang9 / Release / UBSAN"
+    - name: "Linux / clang8 / Release / UBSAN"
       os: linux
       dist: bionic
       compiler: clang
@@ -142,11 +142,11 @@ matrix:
       python: "3.6"
       addons:
         apt:
-          sources: llvm-toolchain-bionic-9
-          packages: clang-9
+          sources: llvm-toolchain-bionic-8
+          packages: clang-8
       env:
-        - CC=clang-9
-        - CXX=clang++-9
+        - CC=clang-8
+        - CXX=clang++-8
         - FLAGS=-fsanitize=undefined -fno-omit-frame-pointer
       install:
         - pip install conan
