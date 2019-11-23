@@ -83,3 +83,27 @@ TEST_CASE(PREFIX"Gathers values ten times and exports it")
     
     CHECK( result == "11111111112222222222" );
 }
+
+TEST_CASE(PREFIX"Throws on negative period")
+{
+    DashboardImpl dashboard{ RegistryImpl{}.bake() };
+    OneShotMonitor::Params params;
+    params.dashboard = &dashboard;
+    params.period = std::chrono::milliseconds{-1};
+    CHECK_THROWS_AS( MonitorWithStubs{std::move(params)}, std::invalid_argument );
+}
+
+TEST_CASE(PREFIX"Throws on negative duration")
+{
+    DashboardImpl dashboard{ RegistryImpl{}.bake() };
+    OneShotMonitor::Params params;
+    params.dashboard = &dashboard;
+    params.duration = std::chrono::milliseconds{-1};
+    CHECK_THROWS_AS( MonitorWithStubs{std::move(params)}, std::invalid_argument );
+}
+
+TEST_CASE(PREFIX"Throws on nullptr dashboard")
+{
+    OneShotMonitor::Params params;
+    CHECK_THROWS_AS( MonitorWithStubs{std::move(params)}, std::invalid_argument );
+}

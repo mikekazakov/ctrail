@@ -35,6 +35,7 @@ protected:
 private:
     void monitor();
     void save( std::string _exported_trail );
+    static const Dashboard *throwIfNull(const Dashboard *dashboard);
 
     std::thread m_WorkerThread;
     const Dashboard * const m_Dashboard = nullptr;

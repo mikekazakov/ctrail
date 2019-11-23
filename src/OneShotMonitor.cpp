@@ -5,14 +5,14 @@
 #include <cassert>
 
 namespace ctrail {
-
+ 
 OneShotMonitor::OneShotMonitor( Params _params ):
     m_Dashboard{_params.dashboard},
     m_Period{ _params.period },
     m_Duration{ _params.duration },
     m_Exporter{ std::move(_params.exporter) },
     m_ExportOptions{ _params.export_options },
-    m_Storage{ MonotonicValuesStorage{ _params.dashboard->names() } },
+    m_Storage{ MonotonicValuesStorage{ throwIfNull(_params.dashboard)->names() } },
     m_Save{ std::move(_params.save) }
 {
     if( m_Period.count() < 0 )
@@ -70,6 +70,13 @@ void OneShotMonitor::fire( std::chrono::nanoseconds _period, std::chrono::nanose
         _job();
         std::this_thread::sleep_for(_period);
     }         
+}
+
+const Dashboard *OneShotMonitor::throwIfNull(const Dashboard * const dashboard)
+{
+    if( dashboard == nullptr ) 
+        throw std::invalid_argument("OneShotMonitor: dashboard cant be nullptr");
+    return dashboard;
 }
 
 }
