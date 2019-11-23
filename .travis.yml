@@ -108,8 +108,8 @@ matrix:
         - CXX=g++-8
       script:
         - mkdir build && cd build
-        - g++ -std=c++17 ../src/CTrail-all.cpp -I../include -c
-        - g++ -std=c++17 ../examples/async.cpp CTrail-all.o -I../include -o async
+        - g++ -std=c++17 -I../include ../src/CTrail-all.cpp -c
+        - g++ -std=c++17 -I../include ../examples/async.cpp CTrail-all.o -pthread -o async
 
     # macOS / Xcode11 / Release  
     - os: osx
