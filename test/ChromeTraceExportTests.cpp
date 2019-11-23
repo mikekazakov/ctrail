@@ -102,7 +102,7 @@ TEST_CASE(PREFIX"properly composes counters")
         "{\"pid\":1,\"tid\":1,\"name\":\"b\",\"ph\":\"C\",\"ts\":1000000,\"args\":{\"v\":11}},\n"
         "{\"pid\":1,\"tid\":1,\"name\":\"b\",\"ph\":\"C\",\"ts\":2000000,\"args\":{\"v\":0}}" );
     CHECK( exporter.composeCounter(storage, 2, buf, 3, diff) == 
-        "\{\"pid\":1,\"tid\":1,\"name\":\"c\",\"ph\":\"C\",\"ts\":0,\"args\":{\"v\":13}},\n"
+        "{\"pid\":1,\"tid\":1,\"name\":\"c\",\"ph\":\"C\",\"ts\":0,\"args\":{\"v\":13}},\n"
         "{\"pid\":1,\"tid\":1,\"name\":\"c\",\"ph\":\"C\",\"ts\":1000000,\"args\":{\"v\":13}},\n"
         "{\"pid\":1,\"tid\":1,\"name\":\"c\",\"ph\":\"C\",\"ts\":2000000,\"args\":{\"v\":0}}" );
 }
