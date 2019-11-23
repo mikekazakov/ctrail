@@ -104,7 +104,7 @@ std::string CSVExporter::fmtTime(std::chrono::system_clock::time_point _tp)
 
     struct tm tm;
 #if _MSC_VER >= 1400
-    localtime_s(&time, &tm);
+    localtime_s(&tm, &time);
 #else    
     localtime_r(&time, &tm);
 #endif
