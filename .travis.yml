@@ -10,8 +10,9 @@ matrix:
         apt:
           sources: ubuntu-toolchain-r-test
           packages: g++-7
-      before_install:
-          - eval "CC=gcc-7 && CXX=g++-7"
+      env:
+        - CC=gcc-7
+        - CXX=g++-7
       install:
         - pip install conan
         - conan user
@@ -32,8 +33,9 @@ matrix:
         apt:
           sources: ubuntu-toolchain-r-test
           packages: g++-8
-      before_install:
-          - eval "CC=gcc-8 && CXX=g++-8"
+      env:
+        - CC=gcc-8
+        - CXX=g++-8          
       install:
         - pip install conan
         - conan user
@@ -62,45 +64,38 @@ matrix:
         - pip install conan
         - conan user
       script:
-        - mkdir build
-        - cd build
+        - mkdir build && cd build
         - conan install ..
         - cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-fsanitize=address -fno-omit-frame-pointer" -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=address"
         - cmake --build . --parallel 2
         - ctest -V .
         
-#
-#    # Linux / GCC8 / GCOV (Release)      
-#    - os: linux
-#      dist: bionic
-#      compiler: gcc
-#      language: python
-#      python: "3.6"            
-#      addons:
-#        apt:
-#          sources: ubuntu-toolchain-r-test
-#          packages: g++-8
-#      env:
-#        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
-#        - CMAKE_BUILD_TYPE=Debug
-#        - CMAKE_CXX_FLAGS="-g -O0 -fprofile-arcs -ftest-coverage"
-#        - CMAKE_EXE_LINKER_FLAGS="--coverage"
-#      after_success:
-#        - bash <(curl -s https://codecov.io/bash)
-#
-#    # Linux / GCC8 / Debug
-#    - os: linux
-#      dist: bionic
-#      compiler: gcc
-#      language: python
-#      python: "3.6"
-#      addons:
-#        apt:
-#          sources: ubuntu-toolchain-r-test
-#          packages: g++-8
-#      env:
-#        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
-#        - CMAKE_BUILD_TYPE=Debug
+
+    # Linux / GCC8 / Debug + GCOV      
+    - os: linux
+      dist: bionic
+      compiler: gcc
+      language: python
+      python: "3.6"            
+      addons:
+        apt:
+          sources: ubuntu-toolchain-r-test
+          packages: g++-8
+      env:
+        - CC=gcc-8
+        - CXX=g++-8
+      install:
+        - pip install conan
+        - conan user
+      script:
+        - mkdir build && cd build
+        - conan install ..
+        - cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-g -O0 -fprofile-arcs -ftest-coverage" -DCMAKE_EXE_LINKER_FLAGS="--coverage"
+        - cmake --build . --parallel 2
+        - ctest -V .        
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
+
 #
 #    # macOS / Xcode10 / Release  
 #    - os: osx
