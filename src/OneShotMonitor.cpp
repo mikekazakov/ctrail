@@ -66,14 +66,10 @@ void OneShotMonitor::fire( std::chrono::nanoseconds _period, std::chrono::nanose
     assert( _period.count() > 0 );
     assert( _duration.count() > 0 );
     const auto start = std::chrono::steady_clock::now();
-    auto to_sleep = _period;
-    while( std::chrono::steady_clock::now() < start + _duration ) {
+    const size_t iterations = _duration.count() / _period.count();
+    for( size_t iteration = 0; iteration < iterations; ++iteration ) {
         _job();
-        
-        const auto tp_before_sleep = std::chrono::steady_clock::now(); 
-        std::this_thread::sleep_for(to_sleep);
-        const auto tp_after_sleep = std::chrono::steady_clock::now();
-        to_sleep = 2 * _period - (tp_after_sleep - tp_before_sleep); 
+        std::this_thread::sleep_until(start + _period * static_cast<std::chrono::nanoseconds::rep>(iteration + 1));
     }         
 }
 
